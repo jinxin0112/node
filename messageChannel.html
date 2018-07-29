@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let messageChannel = new MessageChannel();
+        let port1 = messageChannel.port1; 
+        let port2 = messageChannel.port2; 
+        port1.postMessage('hello');
+        console.log(1);
+        port2.onmessage = function(data){ // 宏任务
+            console.log(data.data);
+        }
+        console.log(2);
+
+        // MutationObserver Promise.then 微任务
+    </script>
+</body>
+</html>
