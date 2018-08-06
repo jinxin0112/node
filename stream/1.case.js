@@ -1,4 +1,5 @@
 // open  data end error close
+// 读流
 
 const fs = require('fs');
 let rs = fs.createReadStream('./a.txt',{
