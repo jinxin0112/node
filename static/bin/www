@@ -1,0 +1,30 @@
+#! /usr/bin/env node
+
+const Server = require('../src/index');
+const commander = require('commander');
+const { version } = require('../package.json');
+const config = require('../src/config');
+const { exec } = require('child_process');
+const os = require('os');
+
+commander.on('--help', () => {
+    console.log('\r\n   how to use:\r\n');
+})
+commander
+    .usage('king-server [options]')
+    .option('-p,--port <n>', 'config port')
+    .option('-o,--host [value]', 'config hostname')
+    .option('-d,--dir [value]', 'config dir')
+    .version(version, '-v,--version')
+    .parse(process.argv);
+
+let server = new Server(commander);
+server.start();
+
+commander = { ...config, ...commander };
+
+if (os.platform() === 'win32') {
+    exec(`start http://${commander.host}:${commander.port}`);
+} else {
+    exec(`open http://${commander.host}:${commander.port}`);
+}
