@@ -14,7 +14,7 @@ const config = require('./config');
 
 let stat = util.promisify(fs.stat);
 let readdir = util.promisify(fs.readdir);
-let template = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8');
+let template = fs.readFileSync(path.join(__dirname, 'template.html'), 'utf8');
 
 
 // Server
