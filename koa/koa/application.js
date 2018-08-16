@@ -22,7 +22,7 @@ class koa extends EventEmitter {
     }
     conponse(ctx, middlewares) {
         function dispatch(index) {
-            if (index === middlewares.length) return
+            if (index === middlewares.length) return Promise.resolve()
             let middleware = middlewares[index];
             return Promise.resolve(middleware(ctx, () => dispatch(index + 1)));
         }
@@ -32,10 +32,14 @@ class koa extends EventEmitter {
         this.middlewares.push(fn);
     }
     handleRequest(req, res) {
-        let ctx = this.createContext(req, res);   
-        this.conponse(ctx,this.middlewares);
-        let body = ctx.body;
-        res.end(body);
+        let ctx = this.createContext(req, res);
+        let p = this.conponse(ctx, this.middlewares);
+        p.then(() => {
+            let body = ctx.body;
+            res.end(body);
+        }).catch(err => {
+            this.emit('error', err);
+        })
     }
     listen(...args) {
         let server = http.createServer(this.handleRequest.bind(this));
